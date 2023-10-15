@@ -34,7 +34,6 @@ object IntelliJContextMenuRepresentation : ContextMenuRepresentation {
                     true
                 },
                 style = IntelliJTheme.menuStyle,
-                resourceLoader = LocalResourceLoader.current,
             ) {
                 contextItems(items)
             }
@@ -45,7 +44,6 @@ object IntelliJContextMenuRepresentation : ContextMenuRepresentation {
 @Composable
 internal fun ContextMenu(
     onDismissRequest: (InputMode) -> Boolean,
-    resourceLoader: ResourceLoader,
     modifier: Modifier = Modifier,
     focusable: Boolean = true,
     style: MenuStyle = IntelliJTheme.menuStyle,
@@ -81,7 +79,6 @@ internal fun ContextMenu(
             MenuContent(
                 modifier = modifier,
                 content = content,
-                resourceLoader = resourceLoader,
             )
         }
     }

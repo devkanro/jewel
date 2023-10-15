@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isTertiary
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.res.ResourceLoader
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ import org.jetbrains.jewel.CommonStateBitMask.Focused
 import org.jetbrains.jewel.CommonStateBitMask.Hovered
 import org.jetbrains.jewel.CommonStateBitMask.Pressed
 import org.jetbrains.jewel.CommonStateBitMask.Selected
+import org.jetbrains.jewel.painter.hints.Stateful
 
 @Composable
 internal fun TabImpl(
@@ -116,7 +118,7 @@ internal fun TabImpl(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             tabData.tabIconResource?.let { icon ->
-                val iconPainter = painterResource(icon, LocalResourceLoader.current)
+                val iconPainter = painterResource(icon, ResourceLoader.Default)
                 Image(modifier = Modifier.alpha(iconAlpha), painter = iconPainter, contentDescription = null)
             }
 
@@ -144,7 +146,7 @@ internal fun TabImpl(
                         }
                     }
                 }
-                val closePainter by tabStyle.icons.close.getPainter(LocalResourceLoader.current, closeButtonState)
+                val closePainter by tabStyle.icons.close.getPainter(Stateful(closeButtonState))
                 Image(
                     modifier = Modifier.clickable(
                         interactionSource = closeActionInteractionSource,

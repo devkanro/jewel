@@ -227,7 +227,6 @@ fun IntelliJTheme(theme: IntelliJThemeDefinition, content: @Composable () -> Uni
         LocalTextStyle provides theme.defaultTextStyle,
         LocalGlobalColors provides theme.globalColors,
         LocalGlobalMetrics provides theme.globalMetrics,
-        *theme.extensionStyles,
         content = content,
     )
 }
@@ -236,7 +235,7 @@ internal val LocalIsDarkTheme = staticCompositionLocalOf<Boolean> {
     error("No InDarkTheme provided")
 }
 
-internal val LocalOnDarkBackground = staticCompositionLocalOf<Boolean> {
+val LocalOnDarkBackground = staticCompositionLocalOf<Boolean> {
     error("No OnDarkBackground provided")
 }
 

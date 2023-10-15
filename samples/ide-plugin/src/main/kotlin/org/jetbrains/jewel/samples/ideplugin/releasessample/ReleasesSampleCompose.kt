@@ -53,8 +53,6 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.ResourceLoader
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -75,16 +73,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toJavaLocalDate
 import org.jetbrains.jewel.HorizontalSplitLayout
 import org.jetbrains.jewel.Icon
-import org.jetbrains.jewel.LocalResourceLoader
 import org.jetbrains.jewel.PopupMenu
-import org.jetbrains.jewel.SvgLoader
 import org.jetbrains.jewel.Text
 import org.jetbrains.jewel.TextField
 import org.jetbrains.jewel.VerticalScrollbar
-import org.jetbrains.jewel.bridge.SwingBridgeService
 import org.jetbrains.jewel.bridge.SwingBridgeTheme
 import org.jetbrains.jewel.bridge.retrieveColorOrUnspecified
-import org.jetbrains.jewel.bridge.retrieveStatelessIcon
 import org.jetbrains.jewel.bridge.retrieveTextStyle
 import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.bridge.toFontFamily
@@ -96,6 +90,7 @@ import org.jetbrains.jewel.foundation.onHover
 import org.jetbrains.jewel.foundation.utils.thenIf
 import org.jetbrains.jewel.intui.standalone.IntUiTheme
 import org.jetbrains.jewel.items
+import org.jetbrains.jewel.painter.ResourcePainterProvider
 import org.jetbrains.skiko.DependsOnJBR
 import java.awt.Font
 import java.time.format.DateTimeFormatter
@@ -106,14 +101,11 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun ReleasesSampleCompose(project: Project) {
     SwingBridgeTheme {
-        val svgLoader = service<SwingBridgeService>().svgLoader
-
         var selectedItem: ContentItem? by remember { mutableStateOf(null) }
         HorizontalSplitLayout(
             first = { modifier ->
                 LeftColumn(
                     project = project,
-                    svgLoader = svgLoader,
                     modifier = modifier.fillMaxSize(),
                     onSelectedItemChange = { selectedItem = it },
                 )
@@ -135,7 +127,6 @@ fun ReleasesSampleCompose(project: Project) {
 @Composable
 fun LeftColumn(
     project: Project,
-    svgLoader: SvgLoader,
     modifier: Modifier = Modifier,
     onSelectedItemChange: (ContentItem?) -> Unit,
 ) {
@@ -153,12 +144,11 @@ fun LeftColumn(
 
             Spacer(Modifier.width(8.dp))
 
-            val resourceLoader = LocalResourceLoader.current
-            SearchBar(service, svgLoader, resourceLoader, Modifier.weight(1f))
+            SearchBar(service, Modifier.weight(1f))
 
             Spacer(Modifier.width(4.dp))
 
-            OverflowMenu(currentContentSource, svgLoader, resourceLoader) {
+            OverflowMenu(currentContentSource) {
                 service.setContentSource(it)
             }
         }
@@ -279,14 +269,9 @@ private enum class ItemType {
 @Composable
 private fun SearchBar(
     service: ReleasesSampleService,
-    svgLoader: SvgLoader,
-    resourceLoader: ResourceLoader,
     modifier: Modifier = Modifier,
 ) {
     val filterText by service.filter.collectAsState()
-
-    val searchIconProvider = retrieveStatelessIcon("actions/search.svg", svgLoader, IntUiTheme.iconData)
-    val searchIcon by searchIconProvider.getPainter(resourceLoader)
 
     val focusRequester = remember { FocusRequester() }
 
@@ -299,11 +284,11 @@ private fun SearchBar(
         onValueChange = { service.filterContent(it) },
         modifier = modifier.focusRequester(focusRequester),
         leadingIcon = {
-            Icon(searchIcon, null, Modifier.padding(end = 8.dp))
+            Icon("actions/search.svg", null, Modifier.padding(end = 8.dp))
         },
         trailingIcon = {
             if (filterText.isNotBlank()) {
-                CloseIconButton(svgLoader, resourceLoader, service)
+                CloseIconButton(service)
             }
         },
     )
@@ -311,8 +296,6 @@ private fun SearchBar(
 
 @Composable
 private fun CloseIconButton(
-    svgLoader: SvgLoader,
-    resourceLoader: ResourceLoader,
     service: ReleasesSampleService,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -327,12 +310,11 @@ private fun CloseIconButton(
         }
     }
 
-    val closeIconProvider = retrieveStatelessIcon("actions/close.svg", svgLoader, IntUiTheme.iconData)
-    val closeIcon by closeIconProvider.getPainter(resourceLoader)
+    val closeIconProvider = ResourcePainterProvider("actions/close.svg")
+    val closeIcon by closeIconProvider.getPainter()
 
-    val hoveredCloseIconProvider =
-        retrieveStatelessIcon("actions/closeHovered.svg", svgLoader, IntUiTheme.iconData)
-    val hoveredCloseIcon by hoveredCloseIconProvider.getPainter(resourceLoader)
+    val hoveredCloseIconProvider = ResourcePainterProvider("actions/closeHovered.svg")
+    val hoveredCloseIcon by hoveredCloseIconProvider.getPainter()
 
     Icon(
         painter = if (hovered) hoveredCloseIcon else closeIcon,
@@ -350,14 +332,8 @@ private fun CloseIconButton(
 @Composable
 private fun OverflowMenu(
     currentContentSource: ContentSource<*>,
-    svgLoader: SvgLoader,
-    resourceLoader: ResourceLoader,
     onContentSourceChange: (ContentSource<*>) -> Unit,
 ) {
-    val iconProvider =
-        retrieveStatelessIcon("actions/more.svg", svgLoader, IntUiTheme.iconData)
-    val icon by iconProvider.getPainter(resourceLoader)
-
     val interactionSource = remember { MutableInteractionSource() }
     var hovered by remember { mutableStateOf(false) }
     var pressed by remember { mutableStateOf(false) }
@@ -385,7 +361,7 @@ private fun OverflowMenu(
 
     // TODO use IconButton when it exists
     Icon(
-        painter = icon,
+        resource = "actions/more.svg",
         contentDescription = "Select data source",
         modifier = Modifier
             .fillMaxHeight()
@@ -398,9 +374,8 @@ private fun OverflowMenu(
     }
 
     if (menuVisible) {
-        val checkedIconProvider =
-            retrieveStatelessIcon("actions/checked.svg", svgLoader, IntUiTheme.iconData)
-        val checkedIcon by checkedIconProvider.getPainter(resourceLoader)
+        val checkedIconProvider = ResourcePainterProvider("actions/checked.svg")
+        val checkedIcon by checkedIconProvider.getPainter()
 
         PopupMenu(
             onDismissRequest = {
@@ -434,7 +409,6 @@ private fun OverflowMenu(
                     }
                 }
             },
-            resourceLoader = resourceLoader,
         )
     }
 }
@@ -470,7 +444,8 @@ fun RightColumn(
 
 @Composable
 private fun ReleaseImage(imagePath: String) {
-    val painter = painterResource(imagePath, LocalResourceLoader.current)
+    val painterProvider = remember(imagePath) { ResourcePainterProvider(imagePath) }
+    val painter by painterProvider.getPainter()
     val transition = rememberInfiniteTransition("HoloFoil")
     val offset by transition.animateFloat(
         initialValue = -1f,

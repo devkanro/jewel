@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.takeOrElse
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
@@ -22,10 +21,8 @@ import com.intellij.util.ui.DirProvider
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.NamedColorUtil
 import com.intellij.util.ui.StatusText
-import org.jetbrains.jewel.CheckboxState
 import org.jetbrains.jewel.IntelliJComponentStyling
 import org.jetbrains.jewel.IntelliJThemeIconData
-import org.jetbrains.jewel.SvgLoader
 import org.jetbrains.jewel.intui.core.IntUiThemeDefinition
 import org.jetbrains.jewel.intui.standalone.styling.IntUiButtonColors
 import org.jetbrains.jewel.intui.standalone.styling.IntUiButtonMetrics
@@ -129,10 +126,8 @@ internal fun createBridgeIntUiDefinition(textStyle: TextStyle): IntUiThemeDefini
 @OptIn(DependsOnJBR::class)
 internal suspend fun createSwingIntUiComponentStyling(
     theme: IntUiThemeDefinition,
-    svgLoader: SvgLoader,
 ): IntelliJComponentStyling = createSwingIntUiComponentStyling(
     theme = theme,
-    svgLoader = svgLoader,
     textAreaTextStyle = retrieveTextStyle("TextArea.font", "TextArea.foreground"),
     textFieldTextStyle = retrieveTextStyle("TextField.font", "TextField.foreground"),
     dropdownTextStyle = retrieveTextStyle("ComboBox.font"),
@@ -142,7 +137,6 @@ internal suspend fun createSwingIntUiComponentStyling(
 
 internal fun createSwingIntUiComponentStyling(
     theme: IntUiThemeDefinition,
-    svgLoader: SvgLoader,
     textFieldTextStyle: TextStyle,
     textAreaTextStyle: TextStyle,
     dropdownTextStyle: TextStyle,
@@ -152,24 +146,24 @@ internal fun createSwingIntUiComponentStyling(
     logger.debug("Obtaining Int UI component styling from Swing...")
 
     val textFieldStyle = readTextFieldStyle(textFieldTextStyle)
-    val menuStyle = readMenuStyle(theme.iconData, svgLoader)
+    val menuStyle = readMenuStyle(theme.iconData)
 
     return IntelliJComponentStyling(
-        checkboxStyle = readCheckboxStyle(theme.iconData, svgLoader),
+        checkboxStyle = readCheckboxStyle(theme.iconData),
         chipStyle = readChipStyle(),
         defaultButtonStyle = readDefaultButtonStyle(),
-        defaultTabStyle = readDefaultTabStyle(theme.iconData, svgLoader),
+        defaultTabStyle = readDefaultTabStyle(theme.iconData),
         dividerStyle = readDividerStyle(),
-        dropdownStyle = readDropdownStyle(theme.iconData, svgLoader, menuStyle, dropdownTextStyle),
-        editorTabStyle = readEditorTabStyle(theme.iconData, svgLoader),
+        dropdownStyle = readDropdownStyle(theme.iconData, menuStyle, dropdownTextStyle),
+        editorTabStyle = readEditorTabStyle(theme.iconData),
         groupHeaderStyle = readGroupHeaderStyle(),
         horizontalProgressBarStyle = readHorizontalProgressBarStyle(),
         labelledTextFieldStyle = readLabelledTextFieldStyle(textFieldStyle, labelTextStyle),
-        lazyTreeStyle = readLazyTreeStyle(theme.iconData, svgLoader),
-        linkStyle = readLinkStyle(theme.iconData, svgLoader, linkTextStyle),
+        lazyTreeStyle = readLazyTreeStyle(theme.iconData),
+        linkStyle = readLinkStyle(theme.iconData, linkTextStyle),
         menuStyle = menuStyle,
         outlinedButtonStyle = readOutlinedButtonStyle(),
-        radioButtonStyle = readRadioButtonStyle(theme.iconData, svgLoader),
+        radioButtonStyle = readRadioButtonStyle(theme.iconData),
         scrollbarStyle = readScrollbarStyle(theme.isDark),
         textAreaStyle = readTextAreaStyle(textAreaTextStyle, textFieldStyle.metrics),
         circularProgressStyle = readCircularProgressStyle(theme.isDark),
@@ -260,7 +254,7 @@ private fun readOutlinedButtonStyle(): IntUiButtonStyle {
 private val iconsBasePath
     get() = DirProvider().dir()
 
-private fun readCheckboxStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiCheckboxStyle {
+private fun readCheckboxStyle(iconData: IntelliJThemeIconData): IntUiCheckboxStyle {
     val background = retrieveColorOrUnspecified("CheckBox.background")
     val textColor = retrieveColorOrUnspecified("CheckBox.foreground")
     val colors = IntUiCheckboxColors(
@@ -282,14 +276,7 @@ private fun readCheckboxStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoa
             iconContentGap = 5.dp, // See DarculaCheckBoxUI#textIconGap
         ),
         icons = IntUiCheckboxIcons(
-            checkbox = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}checkBox.svg",
-                svgLoader = svgLoader,
-                iconData = iconData,
-                prefixTokensProvider = { state: CheckboxState ->
-                    if (state.toggleableState == ToggleableState.Indeterminate) "Indeterminate" else ""
-                },
-            ),
+            checkbox = bridgePainterProvider("${iconsBasePath}checkBox.svg"),
         ),
     )
 }
@@ -360,7 +347,6 @@ private fun readDividerStyle() =
 
 private fun readDropdownStyle(
     iconData: IntelliJThemeIconData,
-    svgLoader: SvgLoader,
     menuStyle: IntUiMenuStyle,
     dropdownTextStyle: TextStyle,
 ): IntUiDropdownStyle {
@@ -406,11 +392,7 @@ private fun readDropdownStyle(
             borderWidth = DarculaUIUtil.BW.dp,
         ),
         icons = IntUiDropdownIcons(
-            chevronDown = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}general/chevron-down.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            chevronDown = bridgePainterProvider("${iconsBasePath}general/chevron-down.svg"),
         ),
         textStyle = dropdownTextStyle,
         menuStyle = menuStyle,
@@ -494,7 +476,6 @@ private fun readLabelledTextFieldStyle(
 
 private fun readLinkStyle(
     iconData: IntelliJThemeIconData,
-    svgLoader: SvgLoader,
     linkTextStyle: TextStyle,
 ): IntUiLinkStyle {
     val normalContent =
@@ -521,16 +502,8 @@ private fun readLinkStyle(
             iconSize = DpSize.Unspecified,
         ),
         icons = IntUiLinkIcons(
-            dropdownChevron = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}general/chevron-down.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
-            externalLink = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}ide/external_link_arrow.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            dropdownChevron = bridgePainterProvider("${iconsBasePath}general/chevron-down.svg"),
+            externalLink = bridgePainterProvider("${iconsBasePath}ide/external_link_arrow.svg"),
         ),
         textStyles = IntUiLinkTextStyles(
             normal = linkTextStyle,
@@ -543,7 +516,7 @@ private fun readLinkStyle(
     )
 }
 
-private fun readMenuStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiMenuStyle {
+private fun readMenuStyle(iconData: IntelliJThemeIconData): IntUiMenuStyle {
     val backgroundSelected = retrieveColorOrUnspecified("MenuItem.selectionBackground")
     val foregroundSelected = retrieveColorOrUnspecified("MenuItem.selectionForeground")
 
@@ -595,16 +568,12 @@ private fun readMenuStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader)
             ),
         ),
         icons = IntUiMenuIcons(
-            submenuChevron = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}general/chevron-down.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            submenuChevron = bridgePainterProvider("${iconsBasePath}general/chevron-down.svg"),
         ),
     )
 }
 
-private fun readRadioButtonStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiRadioButtonStyle {
+private fun readRadioButtonStyle(iconData: IntelliJThemeIconData): IntUiRadioButtonStyle {
     val normalContent = retrieveColorOrUnspecified("RadioButton.foreground")
     val disabledContent = retrieveColorOrUnspecified("RadioButton.disabledText")
     val colors = IntUiRadioButtonColors(
@@ -623,11 +592,7 @@ private fun readRadioButtonStyle(iconData: IntelliJThemeIconData, svgLoader: Svg
             iconContentGap = retrieveIntAsDpOrUnspecified("RadioButton.textIconGap").takeOrElse { 4.dp },
         ),
         icons = IntUiRadioButtonIcons(
-            radioButton = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}radio.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            radioButton = bridgePainterProvider("${iconsBasePath}radio.svg"),
         ),
     )
 }
@@ -736,7 +701,7 @@ private fun readTextFieldStyle(textFieldStyle: TextStyle): IntUiTextFieldStyle {
     )
 }
 
-private fun readLazyTreeStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiLazyTreeStyle {
+private fun readLazyTreeStyle(iconData: IntelliJThemeIconData): IntUiLazyTreeStyle {
     val normalContent = retrieveColorOrUnspecified("Tree.foreground")
     val selectedContent = retrieveColorOrUnspecified("Tree.selectionForeground")
     val selectedElementBackground = retrieveColorOrUnspecified("Tree.selectionBackground")
@@ -752,16 +717,8 @@ private fun readLazyTreeStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoa
         elementBackgroundSelectedFocused = selectedElementBackground,
     )
 
-    val chevronCollapsed = retrieveStatelessIcon(
-        iconPath = "${iconsBasePath}general/chevron-right.svg",
-        iconData = iconData,
-        svgLoader = svgLoader,
-    )
-    val chevronExpanded = retrieveStatelessIcon(
-        iconPath = "${iconsBasePath}general/chevron-down.svg",
-        iconData = iconData,
-        svgLoader = svgLoader,
-    )
+    val chevronCollapsed = bridgePainterProvider("${iconsBasePath}general/chevron-right.svg")
+    val chevronExpanded = bridgePainterProvider("${iconsBasePath}general/chevron-down.svg")
 
     return IntUiLazyTreeStyle(
         colors = colors,
@@ -784,7 +741,7 @@ private fun readLazyTreeStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoa
 }
 
 // See com.intellij.ui.tabs.impl.themes.DefaultTabTheme
-private fun readDefaultTabStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiTabStyle {
+private fun readDefaultTabStyle(iconData: IntelliJThemeIconData): IntUiTabStyle {
     val normalBackground = JBUI.CurrentTheme.DefaultTabs.background().toComposeColor()
     val selectedBackground = JBUI.CurrentTheme.DefaultTabs.underlinedTabBackground().toComposeColorOrUnspecified()
     val normalContent = retrieveColorOrUnspecified("TabbedPane.foreground")
@@ -820,11 +777,7 @@ private fun readDefaultTabStyle(iconData: IntelliJThemeIconData, svgLoader: SvgL
             tabHeight = retrieveIntAsDpOrUnspecified("TabbedPane.tabHeight").takeOrElse { 24.dp },
         ),
         icons = IntUiTabIcons(
-            close = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}expui/general/closeSmall.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            close = bridgePainterProvider("${iconsBasePath}expui/general/closeSmall.svg"),
         ),
         contentAlpha = IntUiTabContentAlpha(
             iconNormal = 1f,
@@ -843,7 +796,7 @@ private fun readDefaultTabStyle(iconData: IntelliJThemeIconData, svgLoader: SvgL
     )
 }
 
-private fun readEditorTabStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLoader): IntUiTabStyle {
+private fun readEditorTabStyle(iconData: IntelliJThemeIconData): IntUiTabStyle {
     val normalBackground = JBUI.CurrentTheme.EditorTabs.background().toComposeColor()
     val selectedBackground = JBUI.CurrentTheme.EditorTabs.underlinedTabBackground().toComposeColorOrUnspecified()
     val normalContent = retrieveColorOrUnspecified("TabbedPane.foreground")
@@ -879,11 +832,7 @@ private fun readEditorTabStyle(iconData: IntelliJThemeIconData, svgLoader: SvgLo
             tabHeight = retrieveIntAsDpOrUnspecified("TabbedPane.tabHeight").takeOrElse { 24.dp },
         ),
         icons = IntUiTabIcons(
-            close = retrieveStatefulIcon(
-                iconPath = "${iconsBasePath}expui/general/closeSmall.svg",
-                iconData = iconData,
-                svgLoader = svgLoader,
-            ),
+            close = bridgePainterProvider("${iconsBasePath}expui/general/closeSmall.svg"),
         ),
         contentAlpha = IntUiTabContentAlpha(
             iconNormal = .7f,

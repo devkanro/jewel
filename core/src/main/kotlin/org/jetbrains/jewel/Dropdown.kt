@@ -44,6 +44,7 @@ import org.jetbrains.jewel.CommonStateBitMask.Hovered
 import org.jetbrains.jewel.CommonStateBitMask.Pressed
 import org.jetbrains.jewel.foundation.Stroke
 import org.jetbrains.jewel.foundation.border
+import org.jetbrains.jewel.painter.hints.Stateful
 import org.jetbrains.jewel.styling.DropdownStyle
 import org.jetbrains.jewel.styling.LocalMenuStyle
 import org.jetbrains.jewel.styling.MenuStyle
@@ -51,7 +52,6 @@ import org.jetbrains.jewel.util.appendIf
 
 @Composable
 fun Dropdown(
-    resourceLoader: ResourceLoader,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     menuModifier: Modifier = Modifier,
@@ -134,7 +134,7 @@ fun Dropdown(
                     .align(Alignment.CenterEnd),
                 contentAlignment = Alignment.Center,
             ) {
-                val chevronIcon by style.icons.chevronDown.getPainter(resourceLoader, dropdownState)
+                val chevronIcon by style.icons.chevronDown.getPainter(Stateful(dropdownState))
                 Icon(
                     painter = chevronIcon,
                     contentDescription = null,
@@ -156,7 +156,6 @@ fun Dropdown(
                 style = style.menuStyle,
                 horizontalAlignment = Alignment.Start,
                 content = menuContent,
-                resourceLoader = resourceLoader,
             )
         }
     }
@@ -166,7 +165,6 @@ fun Dropdown(
 internal fun DropdownMenu(
     onDismissRequest: (InputMode) -> Boolean,
     horizontalAlignment: Alignment.Horizontal,
-    resourceLoader: ResourceLoader,
     modifier: Modifier = Modifier,
     style: MenuStyle,
     content: MenuScope.() -> Unit,
@@ -207,7 +205,6 @@ internal fun DropdownMenu(
             MenuContent(
                 modifier = modifier,
                 content = content,
-                resourceLoader = resourceLoader,
             )
         }
     }

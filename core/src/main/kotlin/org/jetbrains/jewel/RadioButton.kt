@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
@@ -36,12 +35,13 @@ import org.jetbrains.jewel.CommonStateBitMask.Hovered
 import org.jetbrains.jewel.CommonStateBitMask.Pressed
 import org.jetbrains.jewel.CommonStateBitMask.Selected
 import org.jetbrains.jewel.foundation.Stroke
+import org.jetbrains.jewel.painter.hints.Selected
+import org.jetbrains.jewel.painter.hints.Stateful
 import org.jetbrains.jewel.styling.RadioButtonStyle
 
 @Composable
 fun RadioButton(
     selected: Boolean,
-    resourceLoader: ResourceLoader,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -56,7 +56,6 @@ fun RadioButton(
         modifier = modifier,
         enabled = enabled,
         outline = outline,
-        resourceLoader = resourceLoader,
         interactionSource = interactionSource,
         style = style,
         textStyle = textStyle,
@@ -68,7 +67,6 @@ fun RadioButton(
 fun RadioButtonRow(
     text: String,
     selected: Boolean,
-    resourceLoader: ResourceLoader,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -83,7 +81,6 @@ fun RadioButtonRow(
         modifier = modifier,
         enabled = enabled,
         outline = outline,
-        resourceLoader = resourceLoader,
         interactionSource = interactionSource,
         style = style,
         textStyle = textStyle,
@@ -95,7 +92,6 @@ fun RadioButtonRow(
 @Composable
 fun RadioButtonRow(
     selected: Boolean,
-    resourceLoader: ResourceLoader,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -114,16 +110,13 @@ fun RadioButtonRow(
         interactionSource = interactionSource,
         style = style,
         textStyle = textStyle,
-        resourceLoader = resourceLoader,
         content = content,
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RadioButtonImpl(
     selected: Boolean,
-    resourceLoader: ResourceLoader,
     onClick: () -> Unit,
     modifier: Modifier,
     enabled: Boolean,
@@ -169,7 +162,10 @@ private fun RadioButtonImpl(
     val radioButtonModifier = Modifier
         .size(metrics.radioButtonSize)
         .outline(radioButtonState, outline, outlineShape = CircleShape, alignment = Stroke.Alignment.Inside)
-    val radioButtonPainter by style.icons.radioButton.getPainter(resourceLoader, radioButtonState)
+    val radioButtonPainter by style.icons.radioButton.getPainter(
+        Selected(radioButtonState),
+        Stateful(radioButtonState),
+    )
 
     if (content == null) {
         RadioButtonImage(wrapperModifier, radioButtonPainter, radioButtonModifier)

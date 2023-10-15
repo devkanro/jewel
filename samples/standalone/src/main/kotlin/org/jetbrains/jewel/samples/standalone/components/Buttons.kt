@@ -7,19 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.ResourceLoader
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.DefaultButton
 import org.jetbrains.jewel.GroupHeader
 import org.jetbrains.jewel.Icon
 import org.jetbrains.jewel.IconButton
-import org.jetbrains.jewel.JewelSvgLoader
 import org.jetbrains.jewel.OutlinedButton
 import org.jetbrains.jewel.Text
-import org.jetbrains.jewel.styling.rememberStatelessPainterProvider
 
 @Composable
-fun Buttons(svgLoader: JewelSvgLoader, resourceLoader: ResourceLoader) {
+fun Buttons() {
     GroupHeader("Buttons")
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -43,10 +40,8 @@ fun Buttons(svgLoader: JewelSvgLoader, resourceLoader: ResourceLoader) {
         }
 
         IconButton(onClick = {}) {
-            val iconProvider = rememberStatelessPainterProvider("icons/close.svg", svgLoader)
-            val iconPainter by iconProvider.getPainter(resourceLoader)
             Icon(
-                painter = iconPainter,
+                resource = "icons/close.svg",
                 "icon",
             )
         }
