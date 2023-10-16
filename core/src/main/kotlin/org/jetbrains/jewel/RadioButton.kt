@@ -131,15 +131,18 @@ private fun RadioButtonImpl(
     remember(selected, enabled) {
         radioButtonState = radioButtonState.copy(selected = selected, enabled = enabled)
     }
+
+    val swingCompat = LocalSwingCompatMode.current
+
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
             when (interaction) {
-                is PressInteraction.Press -> radioButtonState = radioButtonState.copy(pressed = true)
+                is PressInteraction.Press -> radioButtonState = radioButtonState.copy(pressed = !swingCompat)
                 is PressInteraction.Cancel, is PressInteraction.Release ->
                     radioButtonState =
                         radioButtonState.copy(pressed = false)
 
-                is HoverInteraction.Enter -> radioButtonState = radioButtonState.copy(hovered = true)
+                is HoverInteraction.Enter -> radioButtonState = radioButtonState.copy(hovered = !swingCompat)
                 is HoverInteraction.Exit -> radioButtonState = radioButtonState.copy(hovered = false)
                 is FocusInteraction.Focus -> radioButtonState = radioButtonState.copy(focused = true)
                 is FocusInteraction.Unfocus -> radioButtonState = radioButtonState.copy(focused = false)

@@ -249,16 +249,18 @@ private fun CheckboxImpl(
         checkboxState = checkboxState.copy(toggleableState = state, enabled = enabled)
     }
 
+    val swingCompat = LocalSwingCompatMode.current
+
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
             when (interaction) {
-                is PressInteraction.Press -> checkboxState = checkboxState.copy(pressed = true)
+                is PressInteraction.Press -> checkboxState = checkboxState.copy(pressed = !swingCompat)
                 is PressInteraction.Cancel, is PressInteraction.Release ->
                     checkboxState =
                         checkboxState.copy(pressed = false)
 
-                is HoverInteraction.Enter -> checkboxState = checkboxState.copy(hovered = true)
-                is HoverInteraction.Exit -> checkboxState = checkboxState.copy(hovered = true)
+                is HoverInteraction.Enter -> checkboxState = checkboxState.copy(hovered = !swingCompat)
+                is HoverInteraction.Exit -> checkboxState = checkboxState.copy(hovered = false)
                 is FocusInteraction.Focus -> checkboxState = checkboxState.copy(focused = true)
                 is FocusInteraction.Unfocus -> checkboxState = checkboxState.copy(focused = false)
             }
