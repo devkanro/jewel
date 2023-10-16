@@ -6,6 +6,9 @@ import org.jetbrains.jewel.painter.ResourcePainterProvider
 import org.jetbrains.jewel.painter.ResourceResolver
 import java.net.URL
 
+/**
+ * [ResourceResolver] to resolve resource in Intellij Module and Bridge module.
+ */
 object BridgeResourceResolver : ClassLoaderResourceResolver(
     DirProvider::class.java.classLoader,
     BridgeResourceResolver::class.java.classLoader,

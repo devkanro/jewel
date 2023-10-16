@@ -4,8 +4,21 @@ import androidx.compose.runtime.Immutable
 import org.jetbrains.jewel.util.inDebugMode
 import java.net.URL
 
+/**
+ * Resolve resource by [ClassLoader]s.
+ *
+ * It is recommended that the author of the component library
+ * provide an object to ensure that the loaded resources are
+ * correct when displaying resources in component library modules.
+ *
+ * @see org.jetbrains.jewel.intui.standalone.StandaloneResourceResolver
+ * @see org.jetbrains.jewel.intui.window.IntUiDecoratedWindowResourceResolver
+ * @see org.jetbrains.jewel.bridge.BridgeResourceResolver
+ */
 @Immutable
-open class ClassLoaderResourceResolver(private vararg val classLoaders: ClassLoader) : ResourceResolver {
+open class ClassLoaderResourceResolver(vararg classLoaders: ClassLoader) : ResourceResolver {
+
+    private val classLoaders = classLoaders.distinct()
 
     override fun getClassLoaders(): List<ClassLoader> = classLoaders.toList()
 
