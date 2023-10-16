@@ -22,6 +22,4 @@ open class ClassLoaderResourceResolver(private vararg val classLoaders: ClassLoa
 
         return null
     }
-
-    companion object : ClassLoaderResourceResolver()
 }
