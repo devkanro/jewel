@@ -16,7 +16,5 @@ object Selected : PainterSuffixHint() {
         PainterHint
     }
 
-    override fun toString(): String {
-        return "Selected"
-    }
+    override fun toString(): String = "Selected"
 }

@@ -43,7 +43,7 @@ fun Icon(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     colorFilter: ColorFilter?,
-    resourceResolver: ResourceResolver = SmartResourceResolver,
+    resourceResolver: ResourceResolver = SmartResourceResolver(),
 ) {
     val painterProvider = rememberPainterProvider(resource, resourceResolver)
     val painter by painterProvider.getPainter()
@@ -62,7 +62,7 @@ fun Icon(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified,
-    resourceResolver: ResourceResolver = SmartResourceResolver,
+    resourceResolver: ResourceResolver = SmartResourceResolver(),
 ) {
     val painterProvider = rememberPainterProvider(resource, resourceResolver)
     val painter by painterProvider.getPainter()

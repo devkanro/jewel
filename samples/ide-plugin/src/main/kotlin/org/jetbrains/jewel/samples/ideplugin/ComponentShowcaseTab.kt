@@ -22,9 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.ResourceLoader
 import androidx.compose.ui.unit.dp
-import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import org.jetbrains.jewel.CheckboxRow
 import org.jetbrains.jewel.CircularProgressIndicator
@@ -38,7 +36,6 @@ import org.jetbrains.jewel.RadioButtonRow
 import org.jetbrains.jewel.Text
 import org.jetbrains.jewel.TextField
 import org.jetbrains.jewel.Tooltip
-import org.jetbrains.jewel.bridge.SwingBridgeService
 import org.jetbrains.jewel.bridge.SwingBridgeTheme
 import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.tree.buildTree

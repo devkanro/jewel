@@ -83,6 +83,19 @@ class Palette private constructor(val map: Map<Color, Color>) : PainterSvgPatchH
         }
     }
 
+    override fun toString(): String = "Palette(${map.hashCode()})"
+
+    override fun hashCode(): Int = map.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Palette) return false
+
+        if (map != other.map) return false
+
+        return true
+    }
+
     companion object {
 
         operator fun invoke(map: Map<Color, Color>): PainterHint {

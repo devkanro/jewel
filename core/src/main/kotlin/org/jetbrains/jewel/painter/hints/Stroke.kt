@@ -8,5 +8,5 @@ object Stroke : PainterSuffixHint() {
 
     override fun suffix(): String = "_stroke"
 
-    override fun toString(): String = "StrokePainterHint"
+    override fun toString(): String = "Stroke"
 }

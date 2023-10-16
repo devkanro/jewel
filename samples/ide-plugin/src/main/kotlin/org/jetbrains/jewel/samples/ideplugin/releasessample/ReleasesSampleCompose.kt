@@ -90,7 +90,7 @@ import org.jetbrains.jewel.foundation.onHover
 import org.jetbrains.jewel.foundation.utils.thenIf
 import org.jetbrains.jewel.intui.standalone.IntUiTheme
 import org.jetbrains.jewel.items
-import org.jetbrains.jewel.painter.ResourcePainterProvider
+import org.jetbrains.jewel.painter.rememberPainterProvider
 import org.jetbrains.skiko.DependsOnJBR
 import java.awt.Font
 import java.time.format.DateTimeFormatter
@@ -310,10 +310,10 @@ private fun CloseIconButton(
         }
     }
 
-    val closeIconProvider = ResourcePainterProvider("actions/close.svg")
+    val closeIconProvider = rememberPainterProvider("actions/close.svg")
     val closeIcon by closeIconProvider.getPainter()
 
-    val hoveredCloseIconProvider = ResourcePainterProvider("actions/closeHovered.svg")
+    val hoveredCloseIconProvider = rememberPainterProvider("actions/closeHovered.svg")
     val hoveredCloseIcon by hoveredCloseIconProvider.getPainter()
 
     Icon(
@@ -374,7 +374,7 @@ private fun OverflowMenu(
     }
 
     if (menuVisible) {
-        val checkedIconProvider = ResourcePainterProvider("actions/checked.svg")
+        val checkedIconProvider = rememberPainterProvider("actions/checked.svg")
         val checkedIcon by checkedIconProvider.getPainter()
 
         PopupMenu(
@@ -444,7 +444,7 @@ fun RightColumn(
 
 @Composable
 private fun ReleaseImage(imagePath: String) {
-    val painterProvider = remember(imagePath) { ResourcePainterProvider(imagePath) }
+    val painterProvider = rememberPainterProvider(imagePath)
     val painter by painterProvider.getPainter()
     val transition = rememberInfiniteTransition("HoloFoil")
     val offset by transition.animateFloat(

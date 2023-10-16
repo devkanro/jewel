@@ -33,4 +33,6 @@ object BridgeOverride : PainterPathHint {
     override fun patch(path: String): String {
         error("Should not be called, must call the patch(String, List<ClassLoader> method")
     }
+
+    override fun toString(): String = "BridgeOverride"
 }

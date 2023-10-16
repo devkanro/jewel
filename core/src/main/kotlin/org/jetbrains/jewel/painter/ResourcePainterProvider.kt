@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.loadSvgPainter
 import androidx.compose.ui.res.loadXmlImageVector
+import org.jetbrains.jewel.util.inDebugMode
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.IOException
@@ -27,10 +28,15 @@ import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
+/**
+ * Provide [Painter] by resources in the module and jars, it use the ResourceResolver to load resources.
+ *
+ * It will cache the painter by [PainterHint]s, so it is safe to call [getPainter] multiple times.
+ */
 @Immutable
 class ResourcePainterProvider(
     private val basePath: String,
-    private val resourceResolver: ResourceResolver = SmartResourceResolver,
+    private val resourceResolver: ResourceResolver = SmartResourceResolver(),
 
 ) : PainterProvider {
 
@@ -46,12 +52,14 @@ class ResourcePainterProvider(
 
         val cacheKey = resolvedHints.hashCode()
 
-        if (cache.contains(cacheKey)) {
-            println("Cache hit for $basePath")
+        if (inDebugMode && cache[cacheKey] != null) {
+            println("Cache hit for $basePath(${resolvedHints.joinToString()})")
         }
 
         val painter = cache.getOrPut(cacheKey) {
-            println("Cache miss for $basePath, load it")
+            if (inDebugMode) {
+                println("Cache miss for $basePath(${resolvedHints.joinToString()})")
+            }
             loadPainter(resolvedHints)
         }
 
@@ -78,7 +86,7 @@ class ResourcePainterProvider(
 
         val url = pathStack.firstNotNullOfOrNull {
             resourceResolver.resolve(it)
-        } ?: error("Resource '$basePath' not found")
+        } ?: error("Resource '$basePath(${hints.joinToString()})' not found")
 
         val density = LocalDensity.current
 
@@ -86,7 +94,9 @@ class ResourcePainterProvider(
             "svg" -> {
                 remember(url, density, hints) {
                     patchSvg(url.openStream(), hints).use {
-                        println("Load icon $basePath from $url")
+                        if (inDebugMode) {
+                            println("Load icon $basePath(${hints.joinToString()}) from $url")
+                        }
                         loadSvgPainter(it, density)
                     }
                 }
@@ -119,9 +129,9 @@ class ResourcePainterProvider(
             val builder = documentBuilderFactory.newDocumentBuilder()
             val document = builder.parse(inputStream)
 
-            hints.forEach {
-                if (it !is PainterSvgPatchHint) return@forEach
-                it.patch(document.documentElement)
+            hints.forEach { hint ->
+                if (hint !is PainterSvgPatchHint) return@forEach
+                hint.patch(document.documentElement)
             }
 
             return document.writeToString().byteInputStream()
@@ -148,7 +158,10 @@ class ResourcePainterProvider(
 }
 
 @Composable
-fun rememberPainterProvider(path: String, resourceResolver: ResourceResolver = SmartResourceResolver): PainterProvider {
+fun rememberPainterProvider(
+    path: String,
+    resourceResolver: ResourceResolver = SmartResourceResolver(),
+): PainterProvider {
     return remember(path, resourceResolver) {
         ResourcePainterProvider(path, resourceResolver)
     }

@@ -34,8 +34,6 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isTertiary
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.res.ResourceLoader
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.CommonStateBitMask.Active
@@ -117,9 +115,8 @@ internal fun TabImpl(
             horizontalArrangement = Arrangement.spacedBy(tabStyle.metrics.closeContentGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            tabData.tabIconResource?.let { icon ->
-                val iconPainter = painterResource(icon, ResourceLoader.Default)
-                Image(modifier = Modifier.alpha(iconAlpha), painter = iconPainter, contentDescription = null)
+            tabData.icon?.let { icon ->
+                Image(modifier = Modifier.alpha(iconAlpha), painter = icon, contentDescription = null)
             }
 
             Text(

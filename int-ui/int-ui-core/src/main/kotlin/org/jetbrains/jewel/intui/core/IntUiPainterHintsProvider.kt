@@ -7,10 +7,10 @@ import org.jetbrains.jewel.painter.hints.Palette
 import org.jetbrains.jewel.util.fromRgba
 
 abstract class IntUiPainterHintsProvider(
-    private val isDark: Boolean,
-    private val intellijIconPalette: Map<String, String?>,
-    private val themeIconPalette: Map<String, String?>,
-    private val themeColorPalette: Map<String, Color?>,
+    isDark: Boolean,
+    intellijIconPalette: Map<String, String?>,
+    themeIconPalette: Map<String, String?>,
+    themeColorPalette: Map<String, Color?>,
 ) : PainterHintsProvider {
 
     private val checkBoxPaletteHint: PainterHint
@@ -22,6 +22,7 @@ abstract class IntUiPainterHintsProvider(
         val checkBoxes = mutableMapOf<Color, Color>()
         val trees = mutableMapOf<Color, Color>()
 
+        @Suppress("LoopWithTooManyJumpStatements")
         for ((key, value) in themeIconPalette) {
             value ?: continue
             val map = selectMap(key, checkBoxes, trees, ui) ?: continue

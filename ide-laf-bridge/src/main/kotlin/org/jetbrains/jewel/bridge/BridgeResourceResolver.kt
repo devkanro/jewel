@@ -1,12 +1,12 @@
 package org.jetbrains.jewel.bridge
 
 import com.intellij.util.ui.DirProvider
+import org.jetbrains.jewel.painter.ClassLoaderResourceResolver
 import org.jetbrains.jewel.painter.ResourcePainterProvider
 import org.jetbrains.jewel.painter.ResourceResolver
-import org.jetbrains.jewel.painter.SmartResourceResolver
 import java.net.URL
 
-object BridgeResourceResolver : SmartResourceResolver(
+object BridgeResourceResolver : ClassLoaderResourceResolver(
     DirProvider::class.java.classLoader,
     BridgeResourceResolver::class.java.classLoader,
 ) {

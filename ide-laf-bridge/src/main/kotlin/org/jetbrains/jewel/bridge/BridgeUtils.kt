@@ -26,8 +26,6 @@ import com.intellij.util.ui.JBFont
 import com.intellij.util.ui.JBInsets
 import com.intellij.util.ui.JBValue
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.jewel.IntelliJThemeIconData
-import org.jetbrains.jewel.InteractiveComponentState
 import org.jetbrains.skia.Typeface
 import org.jetbrains.skiko.DependsOnJBR
 import org.jetbrains.skiko.awt.font.AwtFontManager

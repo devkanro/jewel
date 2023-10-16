@@ -22,7 +22,6 @@ import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.NamedColorUtil
 import com.intellij.util.ui.StatusText
 import org.jetbrains.jewel.IntelliJComponentStyling
-import org.jetbrains.jewel.IntelliJThemeIconData
 import org.jetbrains.jewel.intui.core.IntUiThemeDefinition
 import org.jetbrains.jewel.intui.standalone.styling.IntUiButtonColors
 import org.jetbrains.jewel.intui.standalone.styling.IntUiButtonMetrics
@@ -146,24 +145,24 @@ internal fun createSwingIntUiComponentStyling(
     logger.debug("Obtaining Int UI component styling from Swing...")
 
     val textFieldStyle = readTextFieldStyle(textFieldTextStyle)
-    val menuStyle = readMenuStyle(theme.iconData)
+    val menuStyle = readMenuStyle()
 
     return IntelliJComponentStyling(
-        checkboxStyle = readCheckboxStyle(theme.iconData),
+        checkboxStyle = readCheckboxStyle(),
         chipStyle = readChipStyle(),
         defaultButtonStyle = readDefaultButtonStyle(),
-        defaultTabStyle = readDefaultTabStyle(theme.iconData),
+        defaultTabStyle = readDefaultTabStyle(),
         dividerStyle = readDividerStyle(),
-        dropdownStyle = readDropdownStyle(theme.iconData, menuStyle, dropdownTextStyle),
-        editorTabStyle = readEditorTabStyle(theme.iconData),
+        dropdownStyle = readDropdownStyle(menuStyle, dropdownTextStyle),
+        editorTabStyle = readEditorTabStyle(),
         groupHeaderStyle = readGroupHeaderStyle(),
         horizontalProgressBarStyle = readHorizontalProgressBarStyle(),
         labelledTextFieldStyle = readLabelledTextFieldStyle(textFieldStyle, labelTextStyle),
-        lazyTreeStyle = readLazyTreeStyle(theme.iconData),
-        linkStyle = readLinkStyle(theme.iconData, linkTextStyle),
+        lazyTreeStyle = readLazyTreeStyle(),
+        linkStyle = readLinkStyle(linkTextStyle),
         menuStyle = menuStyle,
         outlinedButtonStyle = readOutlinedButtonStyle(),
-        radioButtonStyle = readRadioButtonStyle(theme.iconData),
+        radioButtonStyle = readRadioButtonStyle(),
         scrollbarStyle = readScrollbarStyle(theme.isDark),
         textAreaStyle = readTextAreaStyle(textAreaTextStyle, textFieldStyle.metrics),
         circularProgressStyle = readCircularProgressStyle(theme.isDark),
@@ -254,7 +253,7 @@ private fun readOutlinedButtonStyle(): IntUiButtonStyle {
 private val iconsBasePath
     get() = DirProvider().dir()
 
-private fun readCheckboxStyle(iconData: IntelliJThemeIconData): IntUiCheckboxStyle {
+private fun readCheckboxStyle(): IntUiCheckboxStyle {
     val background = retrieveColorOrUnspecified("CheckBox.background")
     val textColor = retrieveColorOrUnspecified("CheckBox.foreground")
     val colors = IntUiCheckboxColors(
@@ -346,7 +345,6 @@ private fun readDividerStyle() =
     )
 
 private fun readDropdownStyle(
-    iconData: IntelliJThemeIconData,
     menuStyle: IntUiMenuStyle,
     dropdownTextStyle: TextStyle,
 ): IntUiDropdownStyle {
@@ -475,7 +473,6 @@ private fun readLabelledTextFieldStyle(
 }
 
 private fun readLinkStyle(
-    iconData: IntelliJThemeIconData,
     linkTextStyle: TextStyle,
 ): IntUiLinkStyle {
     val normalContent =
@@ -516,7 +513,7 @@ private fun readLinkStyle(
     )
 }
 
-private fun readMenuStyle(iconData: IntelliJThemeIconData): IntUiMenuStyle {
+private fun readMenuStyle(): IntUiMenuStyle {
     val backgroundSelected = retrieveColorOrUnspecified("MenuItem.selectionBackground")
     val foregroundSelected = retrieveColorOrUnspecified("MenuItem.selectionForeground")
 
@@ -573,7 +570,7 @@ private fun readMenuStyle(iconData: IntelliJThemeIconData): IntUiMenuStyle {
     )
 }
 
-private fun readRadioButtonStyle(iconData: IntelliJThemeIconData): IntUiRadioButtonStyle {
+private fun readRadioButtonStyle(): IntUiRadioButtonStyle {
     val normalContent = retrieveColorOrUnspecified("RadioButton.foreground")
     val disabledContent = retrieveColorOrUnspecified("RadioButton.disabledText")
     val colors = IntUiRadioButtonColors(
@@ -701,7 +698,7 @@ private fun readTextFieldStyle(textFieldStyle: TextStyle): IntUiTextFieldStyle {
     )
 }
 
-private fun readLazyTreeStyle(iconData: IntelliJThemeIconData): IntUiLazyTreeStyle {
+private fun readLazyTreeStyle(): IntUiLazyTreeStyle {
     val normalContent = retrieveColorOrUnspecified("Tree.foreground")
     val selectedContent = retrieveColorOrUnspecified("Tree.selectionForeground")
     val selectedElementBackground = retrieveColorOrUnspecified("Tree.selectionBackground")
@@ -741,7 +738,7 @@ private fun readLazyTreeStyle(iconData: IntelliJThemeIconData): IntUiLazyTreeSty
 }
 
 // See com.intellij.ui.tabs.impl.themes.DefaultTabTheme
-private fun readDefaultTabStyle(iconData: IntelliJThemeIconData): IntUiTabStyle {
+private fun readDefaultTabStyle(): IntUiTabStyle {
     val normalBackground = JBUI.CurrentTheme.DefaultTabs.background().toComposeColor()
     val selectedBackground = JBUI.CurrentTheme.DefaultTabs.underlinedTabBackground().toComposeColorOrUnspecified()
     val normalContent = retrieveColorOrUnspecified("TabbedPane.foreground")
@@ -796,7 +793,7 @@ private fun readDefaultTabStyle(iconData: IntelliJThemeIconData): IntUiTabStyle 
     )
 }
 
-private fun readEditorTabStyle(iconData: IntelliJThemeIconData): IntUiTabStyle {
+private fun readEditorTabStyle(): IntUiTabStyle {
     val normalBackground = JBUI.CurrentTheme.EditorTabs.background().toComposeColor()
     val selectedBackground = JBUI.CurrentTheme.EditorTabs.underlinedTabBackground().toComposeColorOrUnspecified()
     val normalContent = retrieveColorOrUnspecified("TabbedPane.foreground")

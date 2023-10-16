@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
-import androidx.compose.ui.res.ResourceLoader
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import org.jetbrains.jewel.CommonStateBitMask.Active

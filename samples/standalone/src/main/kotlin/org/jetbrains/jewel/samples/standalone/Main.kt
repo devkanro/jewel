@@ -122,7 +122,7 @@ fun main() {
                                 Icon(
                                     "icons/jewel-logo.svg",
                                     "Jewel Logo",
-                                    Modifier.padding(horizontal = 4.dp).size(20.dp)
+                                    Modifier.padding(horizontal = 4.dp).size(20.dp),
                                 )
                                 Text("jewel")
                             }
