@@ -9,33 +9,31 @@ import androidx.compose.ui.unit.IntSize
 import kotlin.math.max
 
 internal abstract class LazyTableMeasuredItemProvider(
-    private val availableSize: IntSize,
-    private val columns: Int,
-    private val rows: Int,
-    private val cellSize: LazyTableCellSize,
-    private val horizontalSpacing: Int,
-    private val verticalSpacing: Int,
+    override val availableSize: IntSize,
+    override val columns: Int,
+    override val rows: Int,
+    override val horizontalSpacing: Int,
+    override val verticalSpacing: Int,
     private val itemProvider: LazyTableItemProvider,
     private val measureScope: LazyLayoutMeasureScope,
-    private val density: Density,
-) {
-
+    density: Density,
+) : LazyTableLayoutScope, Density by density {
     private val cachedColumnConstraints = HashMap<Int, Constraints>(100)
     private val cachedRowConstraints = HashMap<Int, Constraints>(100)
 
     private val measuredItems = HashMap<IntOffset, LazyTableMeasuredItem>(500)
 
-    private fun getCellConstraints(column: Int, row: Int): Constraints = with(cellSize) {
+    private fun getCellConstraints(column: Int, row: Int): Constraints = with(itemProvider) {
         val rowConstraints = if (column == 0) {
             cachedRowConstraints.getOrPut(row) {
-                density.rowConstraints(row, availableSize.height, rows, verticalSpacing)
+                getRowConstraints(row) ?: Constraints()
             }
         } else {
             Constraints.fixedHeight(getRowHeight(row))
         }
         val columnConstraints = if (row == 0) {
             cachedColumnConstraints.getOrPut(column) {
-                density.columnConstraints(column, availableSize.width, columns, horizontalSpacing)
+                getColumnConstraints(column) ?: Constraints()
             }
         } else {
             Constraints.fixedWidth(getColumnWidth(column))

@@ -19,7 +19,6 @@ internal fun measureLazyTable(
     availableSize: IntSize,
     rows: Int,
     columns: Int,
-    cellSize: LazyTableCellSize,
     pinnedColumns: Int,
     pinnedRows: Int,
     measuredItemProvider: LazyTableMeasuredItemProvider,

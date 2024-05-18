@@ -8,6 +8,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 
 internal interface LazyTableItemProvider : LazyLayoutItemProvider {
@@ -23,6 +25,10 @@ internal interface LazyTableItemProvider : LazyLayoutItemProvider {
     fun getIndex(position: IntOffset): Int
 
     fun getKey(position: IntOffset): Any
+
+    fun LazyTableLayoutScope.getColumnConstraints(column: Int): Constraints?
+
+    fun LazyTableLayoutScope.getRowConstraints(column: Int): Constraints?
 }
 
 @Composable
@@ -110,4 +116,18 @@ private class LazyTableItemProviderImpl(
         keyPositionMap.getKey(position)
             ?: content?.getKey(position)
             ?: getDefaultLazyLayoutKey(getIndex(position))
+
+    override fun LazyTableLayoutScope.getColumnConstraints(column: Int): Constraints? {
+        content ?: return null
+        return with(content) {
+            this@getColumnConstraints.getColumnConstraints(column)
+        }
+    }
+
+    override fun LazyTableLayoutScope.getRowConstraints(row: Int): Constraints? {
+        content ?: return null
+        return with(content) {
+            this@getRowConstraints.getRowConstraints(row)
+        }
+    }
 }

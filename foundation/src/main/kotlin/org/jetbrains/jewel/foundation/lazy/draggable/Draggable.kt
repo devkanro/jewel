@@ -77,8 +77,8 @@ private fun Modifier.draggingItem(
     if (dragging) {
         this.then(
             Modifier.zIndex(2f).graphicsLayer(
-                translationX = if (orientation == Orientation.Vertical) 0f else state.draggingItemOffsetTransformX.toFloat(),
-                translationY = if (orientation == Orientation.Horizontal) 0f else state.draggingItemOffsetTransformY.toFloat(),
+                translationX = if (orientation == Orientation.Vertical) 0f else state.draggingItemOffsetTransformX,
+                translationY = if (orientation == Orientation.Horizontal) 0f else state.draggingItemOffsetTransformY,
             ),
         )
     } else {

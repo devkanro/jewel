@@ -4,13 +4,15 @@ import androidx.compose.foundation.lazy.layout.IntervalList
 import androidx.compose.foundation.lazy.layout.MutableIntervalList
 import androidx.compose.foundation.lazy.layout.getDefaultLazyLayoutKey
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 
 internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableCells) : LazyTableScope, LazyTableContent {
 
-    private val columnIntervals: MutableIntervalList<LazyTableLineInterval> = MutableIntervalList()
+    private val columnIntervals: MutableIntervalList<LazyTableDimensionInterval> = MutableIntervalList()
 
-    private val rowIntervals: MutableIntervalList<LazyTableLineInterval> = MutableIntervalList()
+    private val rowIntervals: MutableIntervalList<LazyTableDimensionInterval> = MutableIntervalList()
 
     private val cells: LazyTableCells = content()
 
@@ -20,12 +22,38 @@ internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableC
     override val rowCount: Int
         get() = rowIntervals.size
 
-    override fun columnDefinitions(count: Int, key: ((index: Int) -> Any)?) {
-        columnIntervals.addInterval(count, LazyTableLineInterval(key))
+    override fun columnDefinitions(
+        count: Int, key: ((index: Int) -> Any)?,
+        constraints: (LazyTableLayoutScope.(index: Int) -> Constraints)?,
+    ) {
+        columnIntervals.addInterval(count, LazyTableDimensionInterval(key, constraints))
     }
 
-    override fun rowDefinitions(count: Int, key: ((index: Int) -> Any)?) {
-        rowIntervals.addInterval(count, LazyTableLineInterval(key))
+    override fun columnDefinition(key: Any?, constraints: (LazyTableLayoutScope.() -> Constraints)?) {
+        columnIntervals.addInterval(
+            size = 1,
+            LazyTableDimensionInterval(
+                key = if (key != null) { _: Int -> key } else null,
+                constraints = if (constraints != null) { _: Int -> constraints() } else null,
+            )
+        )
+    }
+
+    override fun rowDefinitions(
+        count: Int, key: ((index: Int) -> Any)?,
+        constraints: (LazyTableLayoutScope.(index: Int) -> Constraints)?,
+    ) {
+        rowIntervals.addInterval(count, LazyTableDimensionInterval(key, constraints))
+    }
+
+    override fun rowDefinition(key: Any?, constraints: (LazyTableLayoutScope.() -> Constraints)?) {
+        rowIntervals.addInterval(
+            size = 1,
+            LazyTableDimensionInterval(
+                key = if (key != null) { _: Int -> key } else null,
+                constraints = if (constraints != null) { _: Int -> constraints() } else null,
+            )
+        )
     }
 
     private inline fun <T, R> IntervalList<T>.withInterval(
@@ -63,6 +91,18 @@ internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableC
     }
 
     override fun getKey(index: Int): Pair<Any, Any> = getKey(getPosition(index))
+
+    override fun LazyTableLayoutScope.getColumnConstraints(column: Int): Constraints? {
+        return columnIntervals.withInterval(column) { localIntervalIndex, content ->
+            content.value.constraints?.invoke(this, localIntervalIndex)
+        }
+    }
+
+    override fun LazyTableLayoutScope.getRowConstraints(row: Int): Constraints? {
+        return rowIntervals.withInterval(row) { localIntervalIndex, content ->
+            content.value.constraints?.invoke(this, localIntervalIndex)
+        }
+    }
 
     override fun getContentType(position: IntOffset): Any? {
         val (columnKey, rowKey) = getKey(position)

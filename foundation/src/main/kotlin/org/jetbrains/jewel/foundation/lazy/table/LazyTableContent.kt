@@ -1,6 +1,8 @@
 package org.jetbrains.jewel.foundation.lazy.table
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 
 public interface LazyTableContent {
@@ -20,6 +22,10 @@ public interface LazyTableContent {
     public fun getPosition(index: Int): IntOffset
 
     public fun getIndex(position: IntOffset): Int
+
+    public fun LazyTableLayoutScope.getColumnConstraints(column: Int): Constraints?
+
+    public fun LazyTableLayoutScope.getRowConstraints(row: Int): Constraints?
 
     @Composable
     public fun Item(scope: LazyTableItemScope, index: Int)

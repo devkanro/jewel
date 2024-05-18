@@ -24,6 +24,11 @@ public abstract class LazyLayoutDraggableState<T> {
     public fun onDragStart(key: Any?, offset: Offset) {
         draggingItemKey = key
         initialOffset = offset
+        draggingOffset = Offset.Zero
+        draggingItemOffsetTransformX = 0f
+        draggingItemOffsetTransformY = 0f
+
+        println("Drag start with '$key' at '$offset'")
     }
 
     public fun onDrag(offset: Offset) {
@@ -32,19 +37,32 @@ public abstract class LazyLayoutDraggableState<T> {
         draggingOffset += offset
 
         val draggingItem = getItemWithKey(draggingItemKey ?: return) ?: return
-        val hoverItem = getItemAt(initialOffset + draggingOffset)
+        val hoverItem = getReplacingItem(draggingItem)
 
-        if (hoverItem != null && draggingItem != hoverItem) {
-            val changedOffset = draggingItem.offset - hoverItem.offset
+        if (hoverItem != null && draggingItem.key != hoverItem.key) {
+            val targetOffset = if(draggingItem.index < hoverItem.index) {
+                val maxOffset = hoverItem.offset + Offset(hoverItem.size.width, hoverItem.size.height)
+                maxOffset - Offset(draggingItem.size.width, draggingItem.size.height)
+            } else {
+                hoverItem.offset
+            }
+
+            val changedOffset = draggingItem.offset - targetOffset
+
+            println("Drag '${draggingItem.key}(${draggingItem.size})' at ${draggingItem.offset}")
+            println("Over '${hoverItem.key}(${hoverItem.size})' at ${hoverItem.offset}")
+            println("Into $targetOffset With $changedOffset")
+
+            moveItem(draggingItem.key, hoverItem.key)
 
             draggingItemOffsetTransformX += changedOffset.x
             draggingItemOffsetTransformY += changedOffset.y
-
-            moveItem(draggingItem.index, hoverItem.index)
         }
     }
 
     public fun onDragInterrupted() {
+        println("Drag end")
+
         draggingItemKey = null
         initialOffset = Offset.Zero
         draggingOffset = Offset.Zero
@@ -52,9 +70,9 @@ public abstract class LazyLayoutDraggableState<T> {
         draggingItemOffsetTransformY = 0f
     }
 
-    public abstract fun moveItem(from: Int, to: Int)
+    public abstract fun moveItem(from: Any?, to: Any?)
 
-    public abstract fun getItemAt(offset: Offset): T?
+    public abstract fun getReplacingItem(draggingItem: T): T?
 
     public abstract fun getItemWithKey(key: Any): T?
 

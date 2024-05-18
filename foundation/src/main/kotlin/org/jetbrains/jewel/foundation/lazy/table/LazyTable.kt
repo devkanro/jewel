@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.offset
 @Composable
 public fun LazyTable(
     modifier: Modifier = Modifier,
-    cellSize: LazyTableCellSize,
     state: LazyTableState = rememberLazyTableState(),
     pinnedColumns: Int = 0,
     pinnedRows: Int = 0,
@@ -49,7 +48,6 @@ public fun LazyTable(
 
     val measurePolicy = rememberLazyTabletMeasurePolicy(
         itemProviderLambda = itemProviderLambda,
-        cellSize = cellSize,
         state = state,
         pinnedColumns = pinnedColumns,
         pinnedRows = pinnedRows,
@@ -101,7 +99,6 @@ public fun LazyTable(
 @Composable
 private fun rememberLazyTabletMeasurePolicy(
     itemProviderLambda: () -> LazyTableItemProvider,
-    cellSize: LazyTableCellSize,
     state: LazyTableState,
     pinnedColumns: Int,
     pinnedRows: Int,
@@ -150,7 +147,6 @@ private fun rememberLazyTabletMeasurePolicy(
                 availableSize = availableSize,
                 rows = itemProvider.rowCount,
                 columns = itemProvider.columnCount,
-                cellSize = cellSize,
                 horizontalSpacing = horizontalSpacing,
                 verticalSpacing = verticalSpacing,
                 itemProvider = itemProvider,
@@ -203,7 +199,6 @@ private fun rememberLazyTabletMeasurePolicy(
                 availableSize = availableSize,
                 rows = itemProvider.rowCount,
                 columns = itemProvider.columnCount,
-                cellSize = cellSize,
                 pinnedColumns = minOf(pinnedColumns, itemProvider.columnCount),
                 pinnedRows = minOf(pinnedRows, itemProvider.rowCount),
                 measuredItemProvider = measuredItemProvider,
