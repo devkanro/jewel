@@ -372,12 +372,12 @@ public abstract class org/jetbrains/jewel/foundation/lazy/draggable/LazyLayoutDr
 	public final fun getDraggingOffset-F1C5BW0 ()J
 	public abstract fun getIndex (Ljava/lang/Object;)I
 	public final fun getInitialOffset-F1C5BW0 ()J
-	public abstract fun getItemAt-k-4lQ0M (J)Ljava/lang/Object;
 	public abstract fun getItemWithKey (Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getKey (Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getOffset-tuRUvjQ (Ljava/lang/Object;)J
+	public abstract fun getReplacingItem (Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getSize-7Ah8Wj8 (Ljava/lang/Object;)J
-	public abstract fun moveItem (II)V
+	public abstract fun moveItem (Ljava/lang/Object;Ljava/lang/Object;)V
 	public final fun onDrag-k-4lQ0M (J)V
 	public final fun onDragInterrupted ()V
 	public final fun onDragStart-Uv8p0NA (Ljava/lang/Object;J)V
@@ -386,22 +386,6 @@ public abstract class org/jetbrains/jewel/foundation/lazy/draggable/LazyLayoutDr
 	public final fun setDraggingItemOffsetTransformY (F)V
 	public final fun setDraggingOffset-k-4lQ0M (J)V
 	public final fun setInitialOffset-k-4lQ0M (J)V
-}
-
-public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize {
-	public static final field Companion Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion;
-	public abstract fun columnConstraints-xF2OJ5Q (Landroidx/compose/ui/unit/Density;IIII)J
-	public abstract fun rowConstraints-xF2OJ5Q (Landroidx/compose/ui/unit/Density;IIII)J
-}
-
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion {
-}
-
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableCellSizeKt {
-	public static final fun fixed-73KfpEQ (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion;FFLandroidx/compose/runtime/Composer;I)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize;
-	public static final fun fixedHeight-hFKHopI (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion;FFFLandroidx/compose/runtime/Composer;II)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize;
-	public static final fun responsive-qDBjuR0 (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion;FFFF)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize;
-	public static synthetic fun responsive-qDBjuR0$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize$Companion;FFFFILjava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize;
 }
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableCellState {
@@ -415,23 +399,13 @@ public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTa
 	public abstract fun type (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableColumnDraggingState : org/jetbrains/jewel/foundation/lazy/table/LazyTableDraggableState {
-	public static final field $stable I
-	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun getIndex (Ljava/lang/Object;)I
-	public fun getIndex (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)I
-	public synthetic fun getItemWithKey (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun getItemWithKey (Ljava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
-	public synthetic fun getKey (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun getKey (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Ljava/lang/Object;
-}
-
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableColumnScope {
 	public abstract fun row (ILkotlin/jvm/functions/Function3;)V
 }
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableContent {
 	public abstract fun Item (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemScope;ILandroidx/compose/runtime/Composer;I)V
+	public abstract fun getColumnConstraints-SzdZ-w8 (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutScope;I)Landroidx/compose/ui/unit/Constraints;
 	public abstract fun getColumnCount ()I
 	public abstract fun getContentType (I)Ljava/lang/Object;
 	public abstract fun getContentType--gyyYBs (J)Ljava/lang/Object;
@@ -439,26 +413,23 @@ public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTa
 	public abstract fun getKey (I)Lkotlin/Pair;
 	public abstract fun getKey--gyyYBs (J)Lkotlin/Pair;
 	public abstract fun getPosition-Bjo55l4 (I)J
+	public abstract fun getRowConstraints-SzdZ-w8 (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutScope;I)Landroidx/compose/ui/unit/Constraints;
 	public abstract fun getRowCount ()I
 }
 
-public abstract class org/jetbrains/jewel/foundation/lazy/table/LazyTableDraggableState : org/jetbrains/jewel/foundation/lazy/draggable/LazyLayoutDraggableState {
+public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableDimensionDefinition {
 	public static final field $stable I
-	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun getItemAt-k-4lQ0M (J)Ljava/lang/Object;
-	public fun getItemAt-k-4lQ0M (J)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
-	public synthetic fun getOffset-tuRUvjQ (Ljava/lang/Object;)J
-	public fun getOffset-tuRUvjQ (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)J
-	public final fun getOnMove ()Lkotlin/jvm/functions/Function2;
-	public synthetic fun getSize-7Ah8Wj8 (Ljava/lang/Object;)J
-	public fun getSize-7Ah8Wj8 (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)J
-	public final fun getTableState ()Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;
-	public fun moveItem (II)V
+	public synthetic fun <init> (Ljava/lang/Object;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConstraints-msEJaDk ()J
+	public final fun getKey ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableDraggableStateKt {
-	public static final fun rememberLazyTableColumnDraggingState (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableColumnDraggingState;
-	public static final fun rememberLazyTableRowDraggingState (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableRowDraggingState;
+public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableDimensionScope {
+	public abstract fun getNoConstraints-msEJaDk ()J
+	public abstract fun with-0kLqBqw (Ljava/lang/Object;J)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableDimensionDefinition;
 }
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo {
@@ -484,7 +455,7 @@ public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableItemScope$
 }
 
 public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableKt {
-	public static final fun LazyTable (Landroidx/compose/ui/Modifier;Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCellSize;Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;IILandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/gestures/FlingBehavior;ZILandroidx/compose/foundation/layout/Arrangement$Horizontal;Landroidx/compose/foundation/layout/Arrangement$Vertical;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;III)V
+	public static final fun LazyTable (Landroidx/compose/ui/Modifier;Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;IILandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/gestures/FlingBehavior;ZILandroidx/compose/foundation/layout/Arrangement$Horizontal;Landroidx/compose/foundation/layout/Arrangement$Vertical;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;III)V
 }
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutInfo {
@@ -515,15 +486,12 @@ public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutInfo
 	public static fun getViewportSize-YbymL2g (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutInfo;)J
 }
 
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableRowDraggingState : org/jetbrains/jewel/foundation/lazy/table/LazyTableDraggableState {
-	public static final field $stable I
-	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun getIndex (Ljava/lang/Object;)I
-	public fun getIndex (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)I
-	public synthetic fun getItemWithKey (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun getItemWithKey (Ljava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
-	public synthetic fun getKey (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun getKey (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Ljava/lang/Object;
+public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableLayoutScope : androidx/compose/ui/unit/Density {
+	public abstract fun getAvailableSize-YbymL2g ()J
+	public abstract fun getColumns ()I
+	public abstract fun getHorizontalSpacing ()I
+	public abstract fun getRows ()I
+	public abstract fun getVerticalSpacing ()I
 }
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableRowScope {
@@ -532,17 +500,18 @@ public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTa
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/LazyTableScope {
 	public abstract fun cells (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function5;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCells;
-	public abstract fun columnDefinitions (ILkotlin/jvm/functions/Function1;)V
-	public abstract fun rowDefinitions (ILkotlin/jvm/functions/Function1;)V
+	public abstract fun columnDefinition (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun columnDefinitions (ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
+	public abstract fun rowDefinition (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun rowDefinitions (ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
 }
 
 public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableScope$DefaultImpls {
 	public static synthetic fun cells$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function5;ILjava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableCells;
-}
-
-public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableScopeKt {
-	public static final fun columnDefinition (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;Ljava/lang/Object;)V
-	public static final fun rowDefinition (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;Ljava/lang/Object;)V
+	public static synthetic fun columnDefinition$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun columnDefinitions$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static synthetic fun rowDefinition$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun rowDefinitions$default (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableScope;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 }
 
 public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableScrollbarAdapterKt {
@@ -594,6 +563,50 @@ public final class org/jetbrains/jewel/foundation/lazy/table/LazyTableStateKt {
 
 public abstract interface class org/jetbrains/jewel/foundation/lazy/table/TableScrollScope {
 	public abstract fun scrollBy-E7KxVPU (J)J
+}
+
+public final class org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableColumnDraggingState : org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableDraggableState {
+	public static final field $stable I
+	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun getIndex (Ljava/lang/Object;)I
+	public fun getIndex (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)I
+	public synthetic fun getItemWithKey (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getItemWithKey (Ljava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
+	public synthetic fun getKey (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getKey (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Ljava/lang/Object;
+	public synthetic fun getReplacingItem (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getReplacingItem (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
+}
+
+public abstract class org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableDraggableState : org/jetbrains/jewel/foundation/lazy/draggable/LazyLayoutDraggableState {
+	public static final field $stable I
+	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
+	protected final fun getItemAt-k-4lQ0M (J)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
+	public synthetic fun getOffset-tuRUvjQ (Ljava/lang/Object;)J
+	public fun getOffset-tuRUvjQ (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)J
+	public final fun getOnMove ()Lkotlin/jvm/functions/Function2;
+	public synthetic fun getSize-7Ah8Wj8 (Ljava/lang/Object;)J
+	public fun getSize-7Ah8Wj8 (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)J
+	public final fun getTableState ()Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;
+	public fun moveItem (Ljava/lang/Object;Ljava/lang/Object;)V
+}
+
+public final class org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableDraggableStateKt {
+	public static final fun rememberLazyTableColumnDraggingState (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lorg/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableColumnDraggingState;
+	public static final fun rememberLazyTableRowDraggingState (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lorg/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableRowDraggingState;
+}
+
+public final class org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableRowDraggingState : org/jetbrains/jewel/foundation/lazy/table/draggable/LazyTableDraggableState {
+	public static final field $stable I
+	public fun <init> (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableState;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun getIndex (Ljava/lang/Object;)I
+	public fun getIndex (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)I
+	public synthetic fun getItemWithKey (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getItemWithKey (Ljava/lang/Object;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
+	public synthetic fun getKey (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getKey (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Ljava/lang/Object;
+	public synthetic fun getReplacingItem (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getReplacingItem (Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;)Lorg/jetbrains/jewel/foundation/lazy/table/LazyTableItemInfo;
 }
 
 public final class org/jetbrains/jewel/foundation/lazy/tree/BasicLazyTreeKt {

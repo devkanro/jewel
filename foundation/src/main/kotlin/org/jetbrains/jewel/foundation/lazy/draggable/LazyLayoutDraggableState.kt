@@ -40,7 +40,7 @@ public abstract class LazyLayoutDraggableState<T> {
         val hoverItem = getReplacingItem(draggingItem)
 
         if (hoverItem != null && draggingItem.key != hoverItem.key) {
-            val targetOffset = if(draggingItem.index < hoverItem.index) {
+            val targetOffset = if (draggingItem.index < hoverItem.index) {
                 val maxOffset = hoverItem.offset + Offset(hoverItem.size.width, hoverItem.size.height)
                 maxOffset - Offset(draggingItem.size.width, draggingItem.size.height)
             } else {

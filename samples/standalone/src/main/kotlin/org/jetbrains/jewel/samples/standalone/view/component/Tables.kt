@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,67 +58,67 @@ data class Order(
     @ColumnInfo(
         name = "ID",
         minWidth = 50,
-        order = 0
+        order = 0,
     )
     val id: Int,
     @ColumnInfo(
         name = "Transaction ID",
         minWidth = 120,
-        order = 1
+        order = 1,
     )
     val transactionId: String,
     @ColumnInfo(
         name = "User ID",
         minWidth = 120,
-        order = 2
+        order = 2,
     )
     val uid: String,
     @ColumnInfo(
         name = "User Name",
         minWidth = 120,
-        order = 3
+        order = 3,
     )
     val userName: String,
     @ColumnInfo(
         name = "Product ID",
         minWidth = 80,
-        order = 4
+        order = 4,
     )
     val productId: Int,
     @ColumnInfo(
         name = "Product Name",
         minWidth = 300,
-        order = 5
+        order = 5,
     )
     val productName: String,
     @ColumnInfo(
         name = "Price",
         minWidth = 80,
-        order = 6
+        order = 6,
     )
     val price: String,
     @ColumnInfo(
         name = "Shipping Address",
         minWidth = 400,
-        order = 8
+        order = 8,
     )
     val shippingAddress: String,
     @ColumnInfo(
         name = "Postal Code",
         minWidth = 120,
-        order = 7
+        order = 7,
     )
     val postalCode: String,
     @ColumnInfo(
         name = "Create Time",
         minWidth = 50,
-        order = 9
+        order = 9,
     )
     val createTime: Int,
     @ColumnInfo(
         name = "Update Time",
         minWidth = 50,
-        order = 10
+        order = 10,
     )
     val updateTime: Int,
 ) {
@@ -139,7 +138,7 @@ data class Order(
                 shippingAddress = faker.address.fullAddress(),
                 postalCode = faker.code.asin(),
                 createTime = 0,
-                updateTime = 0
+                updateTime = 0,
             )
         }
     }
@@ -285,7 +284,7 @@ fun Tables() {
                 val info = columns[it].findAnnotations<ColumnInfo>().firstOrNull()
                 Constraints(
                     minWidth = info?.minWidth?.takeIf { it >= 0 }?.dp?.roundToPx() ?: 0,
-                    maxWidth = info?.maxWidth?.takeIf { it >= 0 }?.dp?.roundToPx() ?: Constraints.Infinity
+                    maxWidth = info?.maxWidth?.takeIf { it >= 0 }?.dp?.roundToPx() ?: Constraints.Infinity,
                 )
             }
 
@@ -318,7 +317,7 @@ fun Tables() {
                     }
                     LazyTableHeader(
                         modifier = draggable,
-                        contentAlignment = Alignment.CenterStart
+                        contentAlignment = Alignment.CenterStart,
                     ) {
                         val info = column.findAnnotations<ColumnInfo>().firstOrNull()
                         Text(info?.name ?: column.name, Modifier.padding(horizontal = 4.dp), maxLines = 1)
@@ -346,13 +345,13 @@ fun Tables() {
 
                     LazyTableCell(
                         modifier = draggable,
-                        contentAlignment = Alignment.CenterEnd
+                        contentAlignment = Alignment.CenterEnd,
                     ) {
                         Text(
                             column.getter.call(data[rowKey as Int]).toString(),
                             Modifier.padding(horizontal = 4.dp),
                             overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
+                            maxLines = 1,
                         )
                     }
                 }

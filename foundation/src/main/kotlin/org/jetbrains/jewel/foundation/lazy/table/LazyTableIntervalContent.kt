@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.layout.MutableIntervalList
 import androidx.compose.foundation.lazy.layout.getDefaultLazyLayoutKey
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 
 internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableCells) : LazyTableScope, LazyTableContent {
@@ -23,7 +22,8 @@ internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableC
         get() = rowIntervals.size
 
     override fun columnDefinitions(
-        count: Int, key: ((index: Int) -> Any)?,
+        count: Int,
+        key: ((index: Int) -> Any)?,
         constraints: (LazyTableLayoutScope.(index: Int) -> Constraints)?,
     ) {
         columnIntervals.addInterval(count, LazyTableDimensionInterval(key, constraints))
@@ -35,12 +35,13 @@ internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableC
             LazyTableDimensionInterval(
                 key = if (key != null) { _: Int -> key } else null,
                 constraints = if (constraints != null) { _: Int -> constraints() } else null,
-            )
+            ),
         )
     }
 
     override fun rowDefinitions(
-        count: Int, key: ((index: Int) -> Any)?,
+        count: Int,
+        key: ((index: Int) -> Any)?,
         constraints: (LazyTableLayoutScope.(index: Int) -> Constraints)?,
     ) {
         rowIntervals.addInterval(count, LazyTableDimensionInterval(key, constraints))
@@ -52,7 +53,7 @@ internal class LazyTableIntervalContent(content: LazyTableScope.() -> LazyTableC
             LazyTableDimensionInterval(
                 key = if (key != null) { _: Int -> key } else null,
                 constraints = if (constraints != null) { _: Int -> constraints() } else null,
-            )
+            ),
         )
     }
 
