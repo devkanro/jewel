@@ -162,16 +162,6 @@ fun TableView() {
                 view = viewWithHeader,
                 style = JewelTheme.defaultTableStyle,
             )
-
-            HorizontalScrollbar(
-                rememberTableHorizontalScrollbarAdapter(state),
-                Modifier.fillMaxWidth().align(Alignment.BottomStart),
-            )
-
-            VerticalScrollbar(
-                rememberTableVerticalScrollbarAdapter(state),
-                Modifier.fillMaxHeight().align(Alignment.TopEnd),
-            )
         }
     }
 }

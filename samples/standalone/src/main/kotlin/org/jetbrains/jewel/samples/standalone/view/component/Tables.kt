@@ -342,15 +342,5 @@ fun Tables() {
                 }
             }
         }
-
-        HorizontalScrollbar(
-            rememberTableHorizontalScrollbarAdapter(state),
-            Modifier.fillMaxWidth().align(Alignment.BottomStart),
-        )
-
-        VerticalScrollbar(
-            rememberTableVerticalScrollbarAdapter(state),
-            Modifier.fillMaxHeight().align(Alignment.TopEnd),
-        )
     }
 }

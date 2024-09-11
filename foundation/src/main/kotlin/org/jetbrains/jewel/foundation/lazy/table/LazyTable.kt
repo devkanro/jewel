@@ -1,5 +1,6 @@
 package org.jetbrains.jewel.foundation.lazy.table
 
+import androidx.compose.foundation.clipScrollableContainer
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableDefaults

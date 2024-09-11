@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ fun LongList() {
     Box(Modifier.fillMaxSize()) {
         val listState = rememberSelectableLazyListState()
         SelectableLazyColumn(
-            Modifier.fillMaxSize().border(1.dp, JewelTheme.globalColors.borders.normal),
+            Modifier.fillMaxSize().border(1.dp, JewelTheme.globalColors.borders.normal).verticalScroll(),
             state = listState,
         ) {
             items(data.size, key = { data[it].id }, selectable = { true }) { orderId ->
@@ -62,7 +63,7 @@ fun LongList() {
         }
 
         VerticalScrollbar(
-            rememberScrollbarAdapter(listState.lazyListState),
+            listState.lazyListState,
             Modifier.align(Alignment.TopEnd).fillMaxHeight(),
         )
     }
